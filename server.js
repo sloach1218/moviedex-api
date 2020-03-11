@@ -39,12 +39,6 @@ app.use(function validateBearerToken(req, res, next) {
         )
     }
 
-    if(req.query.country) {
-        response = response.filter(movie => 
-            movie.country.toLowerCase().includes(req.query.country.toLowerCase())
-        )
-    }
-
     if(req.query.avg_vote) {
         response = response.filter(movie => 
             Number(movie.avg_vote) >= Number(req.query.avg_vote)
@@ -55,7 +49,15 @@ app.use(function validateBearerToken(req, res, next) {
     res.json(response)
 })
 
-
+app.use((error, req, res, next) => {
+    let response
+    if (process.env.NODE_ENV === 'production') {
+      response = { error: { message: 'server error' }}
+    } else {
+      response = { error }
+    }
+    res.status(500).json(response)
+  })
 
 
 const PORT =  process.env.PORT || 8000
