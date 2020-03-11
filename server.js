@@ -29,23 +29,23 @@ app.use(function validateBearerToken(req, res, next) {
 
     //filter by genre if genre param is present
     if(req.query.genre) {
-        response = response.filter(movie => {
+        response = response.filter(movie => 
             movie.genre.toLowerCase().includes(req.query.genre.toLowerCase())
-        })
+        )
     }
     
 
     //filter by country if country param is present
     if(req.query.country) {
-        response = response.filter(movie => {
+        response = response.filter(movie => 
             movie.country.toLowerCase().includes(req.query.country.toLowerCase())
-        })
+        )
     }
 
     if(req.query.country) {
-        response = response.filter(movie => {
+        response = response.filter(movie => 
             movie.country.toLowerCase().includes(req.query.country.toLowerCase())
-        })
+        )
     }
 
     //filter by average vote if average vote param is present
