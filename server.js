@@ -7,7 +7,8 @@ const MOVIES = require('./movies.json')
 
 const app = express()
 
-app.use(morgan('dev'))
+const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
+app.use(morgan(morganSetting))
 app.use(helmet())
 app.use(cors())
 
@@ -25,17 +26,13 @@ app.use(function validateBearerToken(req, res, next) {
 
   app.get('/movie', function handleGetMovies(req, res) {
     let response = MOVIES;
-    
 
-    //filter by genre if genre param is present
     if(req.query.genre) {
         response = response.filter(movie => 
             movie.genre.toLowerCase().includes(req.query.genre.toLowerCase())
         )
     }
     
-
-    //filter by country if country param is present
     if(req.query.country) {
         response = response.filter(movie => 
             movie.country.toLowerCase().includes(req.query.country.toLowerCase())
@@ -48,11 +45,10 @@ app.use(function validateBearerToken(req, res, next) {
         )
     }
 
-    //filter by average vote if average vote param is present
     if(req.query.avg_vote) {
-        response = response.filter(movie => {
+        response = response.filter(movie => 
             Number(movie.avg_vote) >= Number(req.query.avg_vote)
-        })
+        )
     }
 
 
@@ -62,7 +58,7 @@ app.use(function validateBearerToken(req, res, next) {
 
 
 
-const PORT = 8000
+const PORT =  process.env.PORT || 8000
 
 app.listen(PORT, () => {
     console.log(`Server listening at http://localhost:${PORT}`)
